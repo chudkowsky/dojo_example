@@ -1,5 +1,5 @@
 use starknet::ContractAddress;
-#[derive(Copy, Drop, Serde,Debug)]
+#[derive(Copy, Drop, Serde, Debug)]
 pub struct Moves {
     pub player: ContractAddress,
     pub remaining: u8,
@@ -13,15 +13,14 @@ pub struct DirectionsAvailable {
     pub directions: Array<Direction>,
 }
 
-#[derive(Copy, Drop, Serde,Debug)]
+#[derive(Copy, Drop, Serde, Debug)]
 pub struct Position {
     pub player: ContractAddress,
     pub vec: Vec2,
 }
 
 
-
-#[derive(Serde, Copy, Drop,PartialEq,Debug)]
+#[derive(Serde, Copy, Drop, PartialEq, Debug)]
 pub enum Direction {
     None,
     Left,
@@ -31,7 +30,7 @@ pub enum Direction {
 }
 
 
-#[derive(Copy, Drop, Serde,Debug)]
+#[derive(Copy, Drop, Serde, Debug)]
 pub struct Vec2 {
     pub x: u32,
     pub y: u32

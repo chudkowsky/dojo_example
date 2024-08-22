@@ -9,3 +9,5 @@ edition = "2024_07"
 
 [dev-dependencies]
 cairo_test = "2.7.0"
+[cairo]
+enable-gas = false
