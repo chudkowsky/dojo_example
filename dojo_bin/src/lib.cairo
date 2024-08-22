@@ -14,10 +14,10 @@ enum TransactionType {
     Move: (ContractAddress, models::Direction)
 }
 
-fn main() -> WorldState {
+fn main(input:Array<felt252>) -> Array<felt252> {
+    //todo: implement deserialize input for player, world and array of transactions
     let player = contract_address_const::<0>();
     let mut world = WorldState { positions: Default::default(), moves: Default::default(), };
-
     let txns = array![
         TransactionType::Spawn(player),
         TransactionType::Move((player, models::Direction::Up)),
@@ -31,5 +31,11 @@ fn main() -> WorldState {
             )) => { ActionsImpl::move(ref world, player, direction) },
         }
     };
-    world
-}
+    let mut output: Array<felt252> = ArrayTrait::new();
+    player.serialize(ref output);
+    let position = world.positions.get(player.into()).deref();
+    position.serialize(ref output);
+    let moves = world.moves.get(player.into()).deref();
+    moves.serialize(ref output);
+    output}
+    //[0, 0, 10, 10, 0, 98, 3, 1]
