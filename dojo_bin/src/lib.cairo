@@ -33,7 +33,3 @@ fn main() -> WorldState {
     };
     world
 }
-#[inline(never)]
-fn identity<T>(t: T) -> T {
-    t
-}

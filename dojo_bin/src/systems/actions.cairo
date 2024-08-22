@@ -20,19 +20,14 @@ pub mod actions {
     pub impl ActionsImpl of IActions {
         fn spawn(ref world: WorldState, player: ContractAddress) {
             let box_position = NullableTrait::new(
-                identity(Position { player: player, vec: Vec2 { x: 10, y: 10, }, })
+                Position { player: player, vec: Vec2 { x: 10, y: 10, }, }
             );
 
             world.positions.insert(player.into(), box_position);
             let box_moves = NullableTrait::new(
-                identity(
-                    Moves {
-                        player: player,
-                        remaining: 100,
-                        last_direction: Direction::None,
-                        can_move: true,
-                    }
-                )
+                Moves {
+                    player: player, remaining: 100, last_direction: Direction::None, can_move: true,
+                }
             );
             world.moves.insert(player.into(), box_moves);
         }
@@ -49,19 +44,14 @@ pub mod actions {
             };
             if moves.remaining == 0 {
                 let box_moves = NullableTrait::new(
-                    identity(
-                        Moves {
-                            player: player,
-                            remaining: 0,
-                            last_direction: direction,
-                            can_move: false,
-                        }
-                    )
+                    Moves {
+                        player: player, remaining: 0, last_direction: direction, can_move: false,
+                    }
                 );
                 world.moves.insert(player.into(), box_moves);
                 return;
             } else {
-                let box_position = NullableTrait::new(identity(position));
+                let box_position = NullableTrait::new(position);
                 world.positions.insert(player.into(), box_position);
                 let moves = Moves {
                     player: player,
@@ -69,7 +59,7 @@ pub mod actions {
                     last_direction: direction,
                     can_move: true,
                 };
-                let box_moves = NullableTrait::new(identity(moves));
+                let box_moves = NullableTrait::new(moves);
                 world.moves.insert(player.into(), box_moves);
             }
         }
@@ -83,10 +73,6 @@ pub mod actions {
             Direction::Down => { position.vec.y -= 1; },
         };
         position
-    }
-    #[inline(never)]
-    fn identity<T>(t: T) -> T {
-        t
     }
 }
 
