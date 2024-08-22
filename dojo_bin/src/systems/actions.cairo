@@ -51,6 +51,7 @@ pub mod actions {
                 world.moves.insert(player.into(), box_moves);
                 return;
             } else {
+                let position = next_position(position, direction);
                 let box_position = NullableTrait::new(position);
                 world.positions.insert(player.into(), box_position);
                 let moves = Moves {
