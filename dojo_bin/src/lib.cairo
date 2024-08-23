@@ -5,21 +5,37 @@ pub mod systems {
 use starknet::contract_address_const;
 use starknet::ContractAddress;
 use models::Direction;
+use models::Position;
+use models::Moves;
 use systems::actions::actions::ActionsImpl;
 use systems::actions::actions::WorldState;
 use core::dict::Felt252Dict;
 
-#[derive(Drop,Serde,Clone,Copy,Debug)]
+#[derive(Drop, Serde, Clone, Copy, Debug)]
 enum TransactionType {
     Spawn: ContractAddress,
     Move: (ContractAddress, models::Direction)
 }
 
 fn main(input: Array<felt252>) -> Array<felt252> {
-    //todo: implement deserialize input for player, world and array of transactions
     let mut input = input.span();
-    let mut txns:Array::<TransactionType> = Serde::deserialize(ref input).unwrap();
-    let mut world = WorldState { positions: Default::default(), moves: Default::default(),};
+    let (states, txns): (Array::<(ContractAddress, Position)>, Array::<TransactionType>) =
+        Serde::deserialize(
+        ref input
+    )
+        .unwrap();
+    let mut world = WorldState { positions: Default::default(), moves: Default::default(), };
+    for state in states {
+        let (player, position) = state;
+        let box_position = NullableTrait::new(position);
+        world.positions.insert(player.into(), box_position);
+        let box_moves = NullableTrait::new(
+            Moves {
+                player: player, remaining: 100, last_direction: Direction::None, can_move: true,
+            }
+        );
+        world.moves.insert(player.into(), box_moves);
+    };
     let mut players: Array<ContractAddress> = ArrayTrait::new();
     let mut output: Array<felt252> = ArrayTrait::new();
     for txn in txns {
@@ -51,19 +67,19 @@ fn main(input: Array<felt252>) -> Array<felt252> {
                     players.append(player);
                 }
             },
-        }        
+        }
     };
-   
+    let mut states: Array::<(ContractAddress, Position)> = ArrayTrait::new();
     for player in players {
         let position = world.positions.get(player.into()).deref();
-        let moves = world.moves.get(player.into()).deref();
-        // println!("player: {:?}, position: {:?}, moves: {:?}", player,position,moves);
-        player.serialize(ref output);
-        position.serialize(ref output);
-        moves.serialize(ref output);
+        let mut state: (ContractAddress, Position) = (player, position.clone());
+        states.append(state);
     };
+    states.serialize(ref output);
     println!("{:?}", output);
     output
 }
 //[0, 0, 10, 10, 0, 98, 3, 1]
+// 3 0 0 10 10 123 123 10 11 234 234 10 11 5 0 0  0 123 0 234 1 123 3 1 234 3
+
 

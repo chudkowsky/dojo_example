@@ -19,11 +19,26 @@ pub mod actions {
     }
     pub impl ActionsImpl of IActions {
         fn spawn(ref world: WorldState, player: ContractAddress) {
-            let box_position = NullableTrait::new(
-                Position { player: player, vec: Vec2 { x: 10, y: 10, }, }
-            );
+            let position = world.positions.get(player.into());
+            match match_nullable(position) {
+                FromNullableResult::Null => {
+                    let box_position = NullableTrait::new(
+                        Position { player: player, vec: Vec2 { x: 10, y: 10, }, }
+                    );
+                    world.positions.insert(player.into(), box_position);
+                },
+                FromNullableResult::NotNull(value) => {
+                    let position = value.unbox();
+                    let box_position = NullableTrait::new(
+                        Position {
+                            player: player,
+                            vec: Vec2 { x: position.vec.x + 10, y: position.vec.y + 10, },
+                        }
+                    );
+                    world.positions.insert(player.into(), box_position);
+                },
+            };
 
-            world.positions.insert(player.into(), box_position);
             let box_moves = NullableTrait::new(
                 Moves {
                     player: player, remaining: 100, last_direction: Direction::None, can_move: true,
