@@ -76,10 +76,5 @@ fn main(input: Array<felt252>) -> Array<felt252> {
         states.append(state);
     };
     states.serialize(ref output);
-    println!("{:?}", output);
     output
 }
-//[0, 0, 10, 10, 0, 98, 3, 1]
-// 3 0 0 10 10 123 123 10 11 234 234 10 11 5 0 0  0 123 0 234 1 123 3 1 234 3
-
-
