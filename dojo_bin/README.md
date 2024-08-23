@@ -6,6 +6,16 @@ This project is a pure Cairo 1.0 equivalent of the Dojo Starter example. The pro
 **Input (Array of felt252)**: Serialized array of tuples: caller (player) **address** and his **position** (which we treat as world state), and array of transactions (Spawn or Move).      
 **Output (Array of felt252)**: Serialized **array** of **tuples**: caller (player) **address** and his **position**   
 
+
+## Building and running
+In order to create a prover input run those commands:  
+```scarb build```   
+```mkdir resources```  
+    Create file `input.txt` and insert your input there.
+```bash
+cairo1-run target/dev/binary_dojo_example.sierra.json --layout recursive --args_file resources/input.txt --proof_mode --trace_file resources/trace.trace --memory_file resources/memory.memory --air_public_input resources/program_input.json --air_private_input resources/private_program_input.json
+
+```
 ## Example Input
 
 ```plaintext
