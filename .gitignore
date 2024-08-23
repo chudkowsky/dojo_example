@@ -2,3 +2,4 @@ target
 dojo/target
 dojo/manifests
 manifests
+dojo_bin/resources
